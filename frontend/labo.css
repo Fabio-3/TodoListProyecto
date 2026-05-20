@@ -1,0 +1,98 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+.form-section, .list-section {
+    width: 100%;
+}
+
+h2 {
+    margin-bottom: 1rem;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 0.7rem;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+
+button {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+ul {
+    width: 100%;
+    padding: 0;
+}
+
+li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 0.5rem;
+}
+
+.checkbox {
+    width: 20px;
+    height: 20px;
+}
+
+.texto {
+    flex: 1;
+    min-width: 120px;
+}
+
+.fecha {
+    font-size: 0.9rem;
+}
+
+.btn-actualizar {
+    background: orange;
+    border: none;
+    color: white;
+}
+
+.btn-eliminar {
+    background: red;
+    border: none;
+    color: white;
+}
+
+@media (min-width: 768px) {
+    .container {
+        flex-direction: row;
+        height: 100vh;
+    }
+
+    .form-section, .list-section {
+        width: 50%;
+        padding: 2rem;
+    }
+
+    .list-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    ul {
+        max-width: 600px;
+    }
+
+    li {
+        flex-wrap: nowrap;
+    }
+}
