@@ -13,43 +13,121 @@ mongoose.connect('mongodb://admin:Biblioteca2003@ac-c63ves8-shard-00-00.n1iunth.
 
 // GET listar tareas
 app.get('/tasks', async (req, res) => {
+
+    res.set('Cache-Control', 'public, max-age=60');
+
     const tasks = await Task.find();
-    res.json(tasks);
+
+    res.status(200).json({
+
+        mensaje: 'Lista de tareas',
+        data: tasks
+
+    });
+
 });
 
 // POST agregar tareas
 app.post('/tasks', async (req, res) => {
+
+    if (!req.body.texto || req.body.texto.trim() === "") {
+
+        return res.status(400).json({
+            mensaje: 'La tarea está vacía'
+        });
+
+    }
+
     const nuevaTarea = new Task({
+
         texto: req.body.texto,
         fecha: new Date().toISOString().split("T")[0],
         completado: false
+
     });
+
     await nuevaTarea.save();
-    res.json({
+
+    res.status(201).json({
+
         mensaje: 'Tarea agregada',
         data: nuevaTarea
-    });
-});
 
+    });
+
+});
 // PUT actualizar tareas
 app.put('/tasks/:id', async (req, res) => {
-    await Task.findByIdAndUpdate(
+
+    if (!req.body.texto || req.body.texto.trim() === "") {
+
+        return res.status(400).json({
+
+            mensaje: 'Texto vacío'
+
+        });
+
+    }
+
+    const tareaActualizada = await Task.findByIdAndUpdate(
+
         req.params.id,
+
         {
             texto: req.body.texto
+        },
+
+        {
+            returnDocument: 'after'
         }
+
     );
-    res.json({
-        mensaje: 'Tarea actualizada'
+
+    if (!tareaActualizada) {
+
+        return res.status(404).json({
+
+            mensaje: 'Tarea no encontrada'
+
+        });
+
+    }
+
+    res.status(200).json({
+
+        mensaje: 'Tarea actualizada',
+        data: tareaActualizada
+
     });
+
 });
 
 // DELETE eliminar tareas
 app.delete('/tasks/:id', async (req, res) => {
-    await Task.findByIdAndDelete(req.params.id);
-    res.json({
-        mensaje: 'Tarea eliminada'
+
+    const tareaEliminada = await Task.findByIdAndDelete(
+
+        req.params.id
+
+    );
+
+    if (!tareaEliminada) {
+
+        return res.status(404).json({
+
+            mensaje: 'Tarea no encontrada'
+
+        });
+
+    }
+
+    res.status(200).json({
+
+        mensaje: 'Tarea eliminada',
+        data: tareaEliminada
+
     });
+
 });
 
 app.listen(3000, () => {
