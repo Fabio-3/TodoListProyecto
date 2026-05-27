@@ -6,15 +6,25 @@ function App() {
   const [tareas, setTareas] = useState([])
   const [texto, setTexto] = useState("")
   const [mensaje, setMensaje] = useState("")
+  const [archivos, setArchivos] = useState([])
+  const [archivoSeleccionado, setArchivoSeleccionado] = useState(null)
 
   useEffect(() => {
     obtenerTareas()
+    obtenerArchivos()
   }, [])
 
   async function obtenerTareas() {
     const response = await fetch('http://localhost:3000/tasks')
     const data = await response.json()
     setTareas(data.data)
+  }
+
+  async function obtenerArchivos() {
+    const response =
+      await fetch('http://localhost:3000/files')
+    const data = await response.json()
+    setArchivos(data.data)
   }
 
   async function agregarTarea() {
@@ -73,6 +83,49 @@ function App() {
       setTareas(nuevasTareas)
     }
   }
+
+  async function subirArchivo() {
+    if (!archivoSeleccionado) {
+      return
+    }
+    const formData = new FormData()
+    formData.append(
+      'archivo',
+      archivoSeleccionado
+    )
+    const response =
+      await fetch(
+        'http://localhost:3000/files',
+        {
+         method: 'POST',
+         body: formData
+        }
+      )
+      if (response.status === 201) {
+        obtenerArchivos()
+        setArchivoSeleccionado(null)
+      }
+  }
+
+  function descargarArchivo(nombre) {
+    window.open(
+      `http://localhost:3000/files/download/${nombre}`
+    )
+  }
+
+  async function eliminarArchivo(nombre) {
+    const response =
+      await fetch(
+        `http://localhost:3000/files/${nombre}`,
+        {
+          method: 'DELETE'
+        }
+      )
+    if (response.status === 200) {
+      obtenerArchivos()
+    }
+  }
+
   return (
     <div className="container">
       <div className="form-section">
@@ -138,6 +191,51 @@ function App() {
                 className="btn-eliminar"
                 onClick={() =>
                   eliminarTarea(tarea._id)
+                }
+              >
+                Eliminar
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="drive-section">
+        <h2>Mini Drive</h2>
+        <input
+          type="file"
+          onChange={(e) => {
+            setArchivoSeleccionado(
+              e.target.files[0]
+            )
+          }}
+        />
+        <button onClick={subirArchivo}>
+          Subir Archivo
+        </button>
+        <ul>
+          {archivos.map((archivo) => (
+            <li key={archivo.nombre}>
+              <span className="texto">
+                {archivo.nombre}
+              </span>
+              <span className="fecha">
+                {archivo.tamaño}
+              </span>
+              <span className="fecha">
+                {archivo.fecha}
+              </span>
+              <button
+                className="btn-actualizar"
+                onClick={() =>
+                  descargarArchivo(archivo.nombre)
+                }
+              >  
+                Descargar
+              </button>
+              <button
+                className="btn-eliminar"
+                onClick={() =>
+                  eliminarArchivo(archivo.nombre)
                 }
               >
                 Eliminar

@@ -7,9 +7,13 @@ body {
     display: flex;
     flex-direction: column;
     padding: 1rem;
+    max-width: 1400px;
+    margin: auto;
 }
 
-.form-section, .list-section {
+.form-section,
+.list-section,
+.drive-section {
     width: 100%;
 }
 
@@ -17,7 +21,7 @@ h2 {
     margin-bottom: 1rem;
 }
 
-input[type="text"] {
+.form-section input[type="text"] {
     width: 100%;
     padding: 0.7rem;
     margin-bottom: 1rem;
@@ -39,10 +43,10 @@ li {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.7rem;
     margin-bottom: 1rem;
     border-bottom: 1px solid #ccc;
-    padding-bottom: 0.5rem;
+    padding-bottom: 0.8rem;
 }
 
 .checkbox {
@@ -51,12 +55,14 @@ li {
 }
 
 .texto {
-    flex: 1;
-    min-width: 120px;
+    padding: 0.5rem;
+    font-size: 1rem;
+    width: 140px;
 }
 
 .fecha {
     font-size: 0.9rem;
+    min-width: 65px;
 }
 
 .btn-actualizar {
@@ -73,26 +79,41 @@ li {
 
 @media (min-width: 768px) {
     .container {
-        flex-direction: row;
-        height: 100vh;
+       flex-direction: row;
+       gap: 1.5rem;
+       align-items: flex-start;
+       padding: 1rem;
     }
 
-    .form-section, .list-section {
-        width: 50%;
-        padding: 2rem;
+    .form-section,
+    .list-section,
+    .drive-section {
+       flex: 1;
+       padding: 1rem;
     }
 
-    .list-section {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+    .list-section,
+    .drive-section {
+       display: flex;
+       flex-direction: column;
     }
 
     ul {
-        max-width: 600px;
+        width: 100%;
     }
 
-    li {
-        flex-wrap: nowrap;
-    }
 }
+
+.list-section {
+    overflow-y: auto;
+}
+
+.drive-section ul {
+    width: 100%;
+}
+
+.drive-section li,
+.list-section li {
+    align-items: center;
+}
+
