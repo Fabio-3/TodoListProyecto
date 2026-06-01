@@ -8,21 +8,51 @@ function App() {
   const [mensaje, setMensaje] = useState("")
   const [archivos, setArchivos] = useState([])
   const [archivoSeleccionado, setArchivoSeleccionado] = useState(null)
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [token, setToken] = useState(
+    localStorage.getItem("token") || ""
+  )
 
   useEffect(() => {
-    obtenerTareas()
-    obtenerArchivos()
-  }, [])
+    if (token) {
+      obtenerTareas()
+      obtenerArchivos()
+    }
+  }, [token])
+
+  function cerrarSesion() {
+    localStorage.removeItem("token")
+    setToken("")
+  }
 
   async function obtenerTareas() {
-    const response = await fetch('http://localhost:3000/tasks')
+    const response = await fetch('http://localhost:3000/tasks', {
+        headers: {
+          Authorization:
+            `Bearer ${token}`
+        }
+      }
+    )
+    if (response.status === 401) {
+      cerrarSesion()
+      return
+    }
     const data = await response.json()
     setTareas(data.data)
   }
 
-  async function obtenerArchivos() {
-    const response =
-      await fetch('http://localhost:3000/files')
+ async function obtenerArchivos() {
+    const response = await fetch('http://localhost:3000/files',{
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    )
+    if (response.status === 401) {
+      cerrarSesion()
+      return
+    }
     const data = await response.json()
     setArchivos(data.data)
   }
@@ -35,12 +65,17 @@ function App() {
     const response = await fetch('http://localhost:3000/tasks', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({
         texto
       })
     })
+    if (response.status === 401) {
+      cerrarSesion()
+      return
+    }
     if (response.status === 201) {
       setTexto("")
       setMensaje("")
@@ -50,8 +85,15 @@ function App() {
 
   async function eliminarTarea(id) {
     const response = await fetch(`http://localhost:3000/tasks/${id}`, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     })
+    if (response.status === 401) {
+      cerrarSesion()
+      return
+    }
     if (response.status === 200) {
       const nuevasTareas = tareas.filter((tarea) => {
         return tarea._id !== id
@@ -64,12 +106,17 @@ function App() {
     const response = await fetch(`http://localhost:3000/tasks/${id}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({
         texto: nuevoTexto
       })
     })
+    if (response.status === 401) {
+      cerrarSesion()
+      return
+    }
     if (response.status === 200) {
       const nuevasTareas = tareas.map((tarea) => {
         if (tarea._id === id) {
@@ -98,19 +145,44 @@ function App() {
         'http://localhost:3000/files',
         {
          method: 'POST',
+         headers: {
+          Authorization: `Bearer ${token}`
+         },
          body: formData
         }
       )
+      if (response.status === 401) {
+        cerrarSesion()
+        return
+      }
       if (response.status === 201) {
         obtenerArchivos()
         setArchivoSeleccionado(null)
       }
   }
 
-  function descargarArchivo(nombre) {
-    window.open(
-      `http://localhost:3000/files/download/${nombre}`
+  async function descargarArchivo(nombre) {
+    const response = await fetch(
+      `http://localhost:3000/files/download/${nombre}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
     )
+    if (response.status === 401) {
+      cerrarSesion()
+      return
+    }
+    const blob = await response.blob()
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = nombre
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+    window.URL.revokeObjectURL(url)
   }
 
   async function eliminarArchivo(nombre) {
@@ -118,12 +190,80 @@ function App() {
       await fetch(
         `http://localhost:3000/files/${nombre}`,
         {
-          method: 'DELETE'
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
         }
       )
-    if (response.status === 200) {
-      obtenerArchivos()
+    if (response.status === 401) {
+      cerrarSesion()
+      return
     }
+    if (response.status === 200) {
+      const nuevosArchivos =
+        archivos.filter((archivo) => {
+          return archivo.nombre !== nombre
+        })
+      setArchivos(nuevosArchivos)
+    }
+  }
+
+  async function login() {
+    const response = await fetch(
+      'http://localhost:3000/login',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          username,
+          password
+        })
+      }
+    )
+    const data = await response.json()
+    if (response.status === 200) {
+      localStorage.setItem(
+        "token",
+        data.token
+      )
+      setToken(data.token)
+    } else {
+      alert(
+        "Usuario o contraseña incorrectos"
+      )
+    }
+  }
+
+  if (!token) {
+    return (
+      <div className="container">
+        <div className="form-section">
+          <h2>Login</h2>
+          <input
+            type="text"
+            placeholder="Usuario"
+            value={username}
+            onChange={(e) =>
+              setUsername(e.target.value)
+            }
+          />
+          <input
+            type="password"
+            placeholder="Contraseña"
+            value={password}
+            onChange={(e) =>
+              setPassword(e.target.value)
+            }
+          />
+          <button onClick={login}>
+            Ingresar
+          </button>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -142,6 +282,14 @@ function App() {
         <button onClick={agregarTarea}>
           Agregar
         </button>
+        <div>
+          <button 
+            className='btn-cerrar'
+            onClick={cerrarSesion}
+          >
+            Cerrar sesión
+          </button>
+        </div>
         <p>{mensaje}</p>
       </div>
       <div className="list-section">

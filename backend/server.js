@@ -89,7 +89,7 @@ app.post(
             },
             'secreto123',
             {
-                expiresIn: '1h'
+                expiresIn: '24h'
             }
         );
         res.status(200).json({
@@ -183,7 +183,10 @@ app.delete('/tasks/:id', passport.authenticate('jwt', {
 });
 
 // POST subir archivos
-app.post('/files', upload.single('archivo'), (req, res) => {
+app.post('/files', passport.authenticate('jwt', {
+        session: false
+    }),
+    upload.single('archivo'), (req, res) => {
     res.status(201).json({
         mensaje: 'Archivo subido',
         archivo: req.file.filename
@@ -191,7 +194,10 @@ app.post('/files', upload.single('archivo'), (req, res) => {
 });
 
 // GET listar archivos
-app.get('/files', (req, res) => {
+app.get('/files', passport.authenticate('jwt', {
+        session: false
+    }),
+    (req, res) => {
     res.set('Cache-Control', 'public, max-age=60');
     fs.readdir('uploads', (err, files) => {
         if (err) {
@@ -218,7 +224,10 @@ app.get('/files', (req, res) => {
 });
 
 // GET descargar archivo
-app.get('/files/download/:nombre', (req, res) => {
+app.get('/files/download/:nombre', passport.authenticate('jwt', {
+        session: false
+    }),
+    (req, res) => {
     const nombreArchivo = req.params.nombre;
     const rutaArchivo = `uploads/${nombreArchivo}`;
     res.download(rutaArchivo, nombreArchivo, (err) => {
@@ -231,7 +240,10 @@ app.get('/files/download/:nombre', (req, res) => {
 });
 
 // DELETE eliminar archivo
-app.delete('/files/:nombre', (req, res) => {
+app.delete('/files/:nombre', passport.authenticate('jwt', {
+        session: false
+    }),
+    (req, res) => {
     const nombreArchivo = req.params.nombre;
     const rutaArchivo = `uploads/${nombreArchivo}`;
     fs.unlink(rutaArchivo, (err) => {
