@@ -27,7 +27,7 @@ function App() {
   }
 
   async function obtenerTareas() {
-    const response = await fetch('http://localhost:3000/tasks', {
+    const response = await fetch('https://localhost:3000/tasks', {
         headers: {
           Authorization:
             `Bearer ${token}`
@@ -43,7 +43,7 @@ function App() {
   }
 
  async function obtenerArchivos() {
-    const response = await fetch('http://localhost:3000/files',{
+    const response = await fetch('https://localhost:3000/files',{
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -62,7 +62,7 @@ function App() {
       setMensaje("La tarea está vacía")
       return
     }
-    const response = await fetch('http://localhost:3000/tasks', {
+    const response = await fetch('https://localhost:3000/tasks', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ function App() {
   }
 
   async function eliminarTarea(id) {
-    const response = await fetch(`http://localhost:3000/tasks/${id}`, {
+    const response = await fetch(`https://localhost:3000/tasks/${id}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`
@@ -103,7 +103,7 @@ function App() {
   }
 
   async function actualizarTarea(id, nuevoTexto) {
-    const response = await fetch(`http://localhost:3000/tasks/${id}`, {
+    const response = await fetch(`https://localhost:3000/tasks/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -142,7 +142,7 @@ function App() {
     )
     const response =
       await fetch(
-        'http://localhost:3000/files',
+        'https://localhost:3000/files',
         {
          method: 'POST',
          headers: {
@@ -163,7 +163,7 @@ function App() {
 
   async function descargarArchivo(nombre) {
     const response = await fetch(
-      `http://localhost:3000/files/download/${nombre}`,
+      `https://localhost:3000/files/download/${nombre}`,
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -188,7 +188,7 @@ function App() {
   async function eliminarArchivo(nombre) {
     const response =
       await fetch(
-        `http://localhost:3000/files/${nombre}`,
+        `https://localhost:3000/files/${nombre}`,
         {
           method: 'DELETE',
           headers: {
@@ -211,7 +211,7 @@ function App() {
 
   async function login() {
     const response = await fetch(
-      'http://localhost:3000/login',
+      'https://localhost:3000/login',
       {
         method: 'POST',
         headers: {

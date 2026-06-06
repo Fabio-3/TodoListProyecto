@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const multer = require('multer');
 const fs = require('fs');
+const https = require('https');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const jwt = require('jsonwebtoken');
@@ -258,6 +259,16 @@ app.delete('/files/:nombre', passport.authenticate('jwt', {
     });
 });
 
-app.listen(3000, () => {
-    console.log('Servidor corriendo en puerto 3000');
+const options = {
+    key: fs.readFileSync('key.pem'),
+    cert: fs.readFileSync('cert.pem')
+};
+
+https.createServer(
+    options,
+    app
+).listen(3000, () => {
+    console.log(
+        'Servidor HTTPS corriendo en puerto 3000'
+    );
 });
