@@ -1,0 +1,27 @@
+[
+  {
+    "texto": "Tarea Web",
+    "fecha": "2026-05-20",
+    "completado": false
+  },
+  {
+    "texto": "Practica Web",
+    "fecha": "2026-05-20",
+    "completado": false
+  },
+  {
+    "texto": "Repositorio",
+    "fecha": "2026-05-20",
+    "completado": false
+  },
+  {
+    "texto": "Tarea Prueba 5",
+    "fecha": "2026-05-25",
+    "completado": false
+  },
+  {
+    "texto": "Exposicion 1",
+    "fecha": "2026-05-26",
+    "completado": false
+  }
+]

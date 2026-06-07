@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -12,8 +13,8 @@ const ExtractJwt = require('passport-jwt').ExtractJwt;
 const Task = require('./models/Task');
 const app = express();
 const USER = {
-    username: 'admin',
-    password: '12345'
+    username: process.env.APP_USER,
+    password: process.env.APP_PASSWORD
 };
 passport.use(
     new LocalStrategy(
@@ -38,7 +39,7 @@ passport.use(
 const opcionesJWT = {
     jwtFromRequest:
         ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: 'secreto123'
+    secretOrKey: process.env.JWT_SECRET
 };
 passport.use(
     new JwtStrategy(
@@ -71,7 +72,7 @@ app.use(cors());
 app.use(express.json());
 app.use(passport.initialize());
 
-mongoose.connect('mongodb://admin:Biblioteca2003@ac-c63ves8-shard-00-00.n1iunth.mongodb.net:27017,ac-c63ves8-shard-00-01.n1iunth.mongodb.net:27017,ac-c63ves8-shard-00-02.n1iunth.mongodb.net:27017/todolist?ssl=true&replicaSet=atlas-88duhx-shard-0&authSource=admin&appName=Cluster0')
+mongoose.connect(process.env.MONGODB_URI)
 .then(() => console.log('MongoDB conectado'))
 .catch((err) => console.log(err));
 
@@ -88,7 +89,7 @@ app.post(
             {
                 username: USER.username
             },
-            'secreto123',
+            process.env.JWT_SECRET,
             {
                 expiresIn: '24h'
             }
