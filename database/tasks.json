@@ -11,7 +11,27 @@
   },
   {
     "texto": "Repositorio",
-    "fecha": "2026-05-20",
+    "fecha": "2026-05-21",
+    "completado": false
+  },
+  {
+    "texto": "Parcial Web",
+    "fecha": "2026-05-22",
+    "completado": false
+  },
+  {
+    "texto": "Segunda Instancia Web",
+    "fecha": "2026-05-23",
+    "completado": false
+  },
+  {
+    "texto": "Repaso IHC",
+    "fecha": "2026-05-23",
+    "completado": false
+  },
+  {
+    "texto": "Resumen PF",
+    "fecha": "2026-05-23",
     "completado": false
   },
   {

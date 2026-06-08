@@ -4,7 +4,7 @@ Proyecto desarrollado con React, Express, MongoDB Atlas, Passport Local Strategy
 
 ## Requisitos Previos
 
-Antes de ejecutar el proyecto es necesario tener instalado:
+Antes de ejecutar el proyecto es necesario tener:
 
 * Node.js
 * Git
@@ -43,7 +43,7 @@ Seleccionar:
 
 Create → Cluster
 
-Mantener la configuración gratuita (Free Tier) y finalizar la creación.
+Mantener la configuración gratuita (Free Tier), ponerle un nombre, en provider AWS, region por defecto y finalizar la creación.
 
 ### 3. Crear la Base de Datos
 
@@ -69,6 +69,8 @@ Seleccionar:
 
 Connect → Drivers
 
+Dentro elegir Driver: Node.js
+
 Copiar la cadena de conexión proporcionada por MongoDB Atlas.
 
 Ejemplo:
@@ -79,10 +81,10 @@ mongodb+srv://usuario:<password>@cluster.mongodb.net/todolist
 
 Reemplazar:
 
-* usuario → nombre de usuario configurado en Atlas.
-* password → contraseña configurada en Atlas.
+* usuario → nombre de usuario configurado al crear el acceso a la base de datos en Atlas.
+* password → contraseña configurada para ese usuario en Atlas.
 
-Si la conexión SRV presenta problemas, puede utilizarse la cadena de conexión estándar proporcionada por MongoDB Atlas(sin SRV).
+Si la conexión SRV presenta problemas, puede utilizarse la cadena de conexión estándar proporcionada por MongoDB Atlas(sin SRV connection) y si aun asi no lograra conectar agregar el nombre de la bd "todolist" antes de ? dentro de la URI de conexion.
 
 ---
 
@@ -240,9 +242,9 @@ Add Data → Insert Document
 database/tasks.json
 ```
 
-6. Copiar cada documento individualmente.
-7. Insertar cada tarea en la colección.
-8. Repetir el proceso hasta cargar todos los registros.
+6. Seleccionar y copiar todo lo que esta en tasks.json.
+7. Eliminar todo el documento de ejemplo que muestra Insert Document y reemplazarlo por todas las tasks copiadas de tasks.json .
+8. Presionamos Insert y ya se cargarian todas las tareas dentro de la coleccion tasks.
 
 Una vez cargadas las tareas, la aplicación las mostrará automáticamente al iniciar.
 
