@@ -1,15 +1,6 @@
-# TodoList + Mini Drive con Autenticación JWT y HTTPS
+# TodoList + Mini Drive con Autenticación JWT y HTTPS - Indicaciones para instalacion y despliegue de la aplicacion
 
 Proyecto desarrollado con React, Express, MongoDB Atlas, Passport Local Strategy, Passport JWT y HTTPS.
-
-## Requisitos Previos
-
-Antes de ejecutar el proyecto es necesario tener:
-
-* Node.js
-* Git
-* MongoDB Atlas
-* OpenSSL
 
 ---
 
